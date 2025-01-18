@@ -1,0 +1,265 @@
+:root {
+    --bg-gradient: linear-gradient(135deg, #833ab4, #fd1d1d, #405de6);
+    --text-color: #fff;
+    --note-bg: #1a1a1a;
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --button-gradient: linear-gradient(135deg, #833ab4, #fd1d1d);
+}
+
+body.light-mode {
+    --bg-gradient: linear-gradient(135deg, #e0c3fc, #8ec5fc);
+    --text-color: #333;
+    --note-bg: #ffffff;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.8);
+    --button-gradient: linear-gradient(135deg, #8ec5fc, #e0c3fc);
+}
+
+body {
+    background: var(--bg-gradient);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+    color: var(--text-color);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+@keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+    gap: 20px;
+    padding: 20px;
+}
+
+.sidebar {
+    width: 300px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.theme-toggle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    padding: 0;
+    font-size: 1.2em;
+}
+
+.search-container {
+    margin-bottom: 15px;
+}
+
+#searchNotes {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    color: white;
+}
+
+.tag-container {
+    width: 70%;
+    margin-bottom: 15px;
+}
+
+#noteTags {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: white;
+}
+
+.editor {
+    flex: 1;
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.editor-footer {
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#wordCount {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9em;
+}
+
+h1, h2 {
+    color: var(--text-color);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+button {
+    background: var(--button-gradient);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: transform 0.2s, box-shadow 0.2s;
+    width: 100%;
+    margin: 10px 0;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(131, 58, 180, 0.4);
+}
+
+.delete-btn {
+    background: linear-gradient(135deg, #ff4444, #cc0000);
+}
+
+.delete-btn:hover {
+    box-shadow: 0 4px 15px rgba(204, 0, 0, 0.4);
+}
+
+#noteList {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+#noteList li {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#noteList li:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateX(5px);
+}
+
+#noteTitle {
+    width: 70%;
+    max-width: 600px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+}
+
+#noteContent {
+    width: 90%;
+    max-width: 1200px;
+    height: calc(85vh - 150px); 
+    background: var(--note-bg);
+    color: var(--text-color);
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    resize: none;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.button-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.button-container button {
+    width: auto;
+    min-width: 120px;
+    margin: 0;
+}
+
+.editor button {
+    width: auto;
+    min-width: 120px;
+    margin-top: 20px;
+}
+
+.shortcuts-info {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: auto;
+    }
+    
+    #noteContent {
+        height: 50vh;
+    }
+    
+    #noteTitle {
+        width: 90%;
+    }
+    
+    #noteContent {
+        width: 90%;
+    }
+}
+
+input::placeholder, textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}

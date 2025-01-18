@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1a1a1a">
+    <title>Notes Website</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>My Notes</h2>
+                <button id="themeToggle" class="theme-toggle">🌙</button>
+            </div>
+            <div class="search-container">
+                <input type="text" id="searchNotes" placeholder="Search notes...">
+            </div>
+            <button id="newNote">New Note</button>
+            <ul id="noteList"></ul>
+        </aside>
+        <main class="editor">
+            <input type="text" id="noteTitle" placeholder="Note Title">
+            <div class="tag-container">
+                <input type="text" id="noteTags" placeholder="Add tags (comma separated)">
+            </div>
+            <textarea id="noteContent" placeholder="Write your note here..."></textarea>
+            <div class="editor-footer">
+                <span id="wordCount">Words: 0 | Characters: 0</span>
+                <div class="button-container">
+                    <button id="deleteNote" class="delete-btn">Delete</button>
+                    <button id="saveNote">Save Note</button>
+                    <button id="downloadNote">Download</button>
+                </div>
+            </div>
+        </main>
+    </div>
+    <div id="shortcuts" class="shortcuts-info">
+        Ctrl + S: Save | Ctrl + N: New Note | Ctrl + D: Delete
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
