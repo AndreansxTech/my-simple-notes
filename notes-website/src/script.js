@@ -1,7 +1,11 @@
+import NotesDB from './services/db.js';
+import MarkdownEditor from './components/markdown-editor.js';
+
 // This file contains the main JavaScript logic for the website, handling user interactions and managing the note-taking functionality.
 
 class NoteTakingApp {
     constructor() {
+        this.db = new NotesDB();
         this.notes = [];
         this.currentNoteIndex = null;
         this.autoSaveInterval = null;
@@ -9,7 +13,9 @@ class NoteTakingApp {
         this.init();
     }
 
-    init() {
+    async init() {
+        await this.db.init();
+        this.markdownEditor = new MarkdownEditor(document.getElementById('noteContent'));
         this.loadNotes();
         this.bindEvents();
         this.applyTheme();
@@ -28,30 +34,46 @@ class NoteTakingApp {
         this.startAutoSave();
     }
 
-    loadNotes() {
-        const notesContainer = document.getElementById('noteList');
-        notesContainer.innerHTML = '';
-        this.notes.forEach((note, index) => {
-            const noteItem = document.createElement('li');
-            noteItem.textContent = note.title;
-            noteItem.dataset.index = index;
-            notesContainer.appendChild(noteItem);
-        });
+    async loadNotes() {
+        try {
+            this.notes = await this.db.getNotes() || [];
+            const notesContainer = document.getElementById('noteList');
+            notesContainer.innerHTML = '';
+            this.notes.forEach((note, index) => {
+                const noteItem = document.createElement('li');
+                noteItem.textContent = note.title;
+                noteItem.dataset.index = index;
+                notesContainer.appendChild(noteItem);
+            });
+        } catch (error) {
+            console.error('Error loading notes:', error);
+        }
     }
 
-    saveNote() {
+    async saveNote() {
         const title = document.getElementById('noteTitle').value;
-        const content = document.getElementById('noteContent').value;
+        const content = this.markdownEditor.getValue();
+        const tags = document.getElementById('noteTags').value.split(',').map(tag => tag.trim());
 
-        if (this.currentNoteIndex !== null) {
-            this.notes[this.currentNoteIndex] = { title, content };
-        } else {
-            this.notes.push({ title, content });
+        const note = {
+            id: this.currentNoteIndex !== null ? this.notes[this.currentNoteIndex].id : Date.now(),
+            title,
+            content,
+            tags,
+            updated: new Date().toISOString()
+        };
+
+        try {
+            await this.db.saveNote(note);
+            if (this.currentNoteIndex !== null) {
+                this.notes[this.currentNoteIndex] = note;
+            } else {
+                this.notes.push(note);
+            }
+            this.loadNotes();
+        } catch (error) {
+            console.error('Error saving note:', error);
         }
-
-        this.currentNoteIndex = this.notes.length - 1;
-        this.loadNotes();
-        this.clearInputs();
     }
 
     createNewNote() {
