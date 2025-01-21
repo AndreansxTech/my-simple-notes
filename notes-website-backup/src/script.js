@@ -1,7 +1,7 @@
 import NotesDB from './services/db.js';
 import MarkdownEditor from './components/markdown-editor.js';
 
-// This file contains the main JavaScript logic for the website handling user interactions and managing the note-taking functionality
+// This file contains the main JavaScript logic for the website, handling user interactions and managing the note-taking functionality.
 
 class NoteTakingApp {
     constructor() {
@@ -185,7 +185,7 @@ class NoteTakingApp {
             modal.querySelector('#cancelRename').addEventListener('click', closeModal);
             modal.querySelector('#confirmRename').addEventListener('click', handleRename);
             
-            // Handle enter and escape keys
+            // Handle Enter and Escape keys
             input.addEventListener('keyup', async (e) => {
                 if (e.key === 'Enter') await handleRename();
                 if (e.key === 'Escape') closeModal();
@@ -217,12 +217,12 @@ class NoteTakingApp {
             const shouldOverwrite = await this.showOverwriteConfirmation(title);
             if (!shouldOverwrite) return;
 
-            // If overwriting remove the old note
+            // If overwriting, remove the old note
             await this.db.db.transaction(['notes'], 'readwrite')
                 .objectStore('notes')
                 .delete(existingNote.id);
 
-            // Update current index to the existing notes position
+            // Update current index to the existing note's position
             this.currentNoteIndex = this.notes.indexOf(existingNote);
         }
 

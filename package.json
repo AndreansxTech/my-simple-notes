@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "dompurify": "^2.5.8",
+    "file-saver": "^2.0.5",
+    "marked": "^4.3.0"
+  },
+  "name": "my-simple-notes",
+  "version": "1.0.0",
+  "description": "This project is a note-taking website designed with a VS Code-like layout and a glassmorphism design. It allows users to create, edit, and manage their notes efficiently.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "live-server src --port=3000",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}
