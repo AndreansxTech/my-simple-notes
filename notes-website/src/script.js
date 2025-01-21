@@ -113,7 +113,7 @@ class NoteTakingApp {
 
         // Add event listeners directly instead of using onclick in HTML
         menu.querySelector('.rename-item').addEventListener('click', () => this.renameNote(index));
-        menu.querySelector('.delete').addEventListener('click', () => this.deleteNote(index));
+        menu.querySelector('.delete').addEventListener('click', () => this.showDeleteConfirmation(index)); // Changed this line
 
         document.body.appendChild(menu);
 
@@ -133,6 +133,50 @@ class NoteTakingApp {
         document.addEventListener('click', closeMenu);
     }
 
+     async showDeleteConfirmation(index) {
+        const overlay = document.createElement('div');
+        overlay.className = 'confirm-modal-overlay';
+        
+        const modal = document.createElement('div');
+        modal.className = 'confirm-modal';
+        modal.innerHTML = `
+            <h3>⚠️ Delete Note</h3>
+            <p>Are you sure you want to delete this note?</p>
+            <div class="button-group">
+                <button id="cancelDelete">Cancel</button>
+                <button id="confirmDelete" class="confirm-delete">Delete</button>
+            </div>
+        `;
+        
+        overlay.appendChild(modal);
+        document.body.appendChild(overlay);
+
+        const handleCancel = () => {
+            overlay.remove();
+        };
+
+        const handleConfirm = async () => {
+           overlay.remove();
+           await this.deleteNote(index);
+         };
+
+        modal.querySelector('#cancelDelete').addEventListener('click', handleCancel);
+        modal.querySelector('#confirmDelete').addEventListener('click', handleConfirm);
+        
+        // Close on overlay click
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) handleCancel();
+        });
+
+        // Handle Escape key
+        document.addEventListener('keydown', function closeOnEscape(e) {
+            if (e.key === 'Escape') {
+                handleCancel();
+                document.removeEventListener('keydown', closeOnEscape);
+            }
+        });
+    }
+    
     async renameNote(index) {
         const note = this.notes[index];
         
@@ -393,32 +437,30 @@ class NoteTakingApp {
     }
 
     async deleteNote(index) {
-        if (confirm('Are you sure you want to delete this note?')) {
-            try {
-                const note = this.notes[index];
-                // Remove from IndexedDB
-                const transaction = this.db.db.transaction(['notes'], 'readwrite');
-                const store = transaction.objectStore('notes');
-                await store.delete(note.id);
-                
-                // Remove from array
-                this.notes.splice(index, 1);
-                
-                // Clear inputs if we're deleting the current note
-                if (this.currentNoteIndex === index) {
-                    this.currentNoteIndex = null;
-                    this.clearInputs();
-                }
-                
-                // Refresh the list
-                this.loadNotes();
-                
-                // Close the context menu if it's open
-                const menu = document.querySelector('.note-actions-menu');
-                if (menu) menu.remove();
-            } catch (error) {
-                console.error('Error deleting note:', error);
+        try {
+            const note = this.notes[index];
+            // Remove from IndexedDB
+            const transaction = this.db.db.transaction(['notes'], 'readwrite');
+            const store = transaction.objectStore('notes');
+            await store.delete(note.id);
+            
+            // Remove from array
+            this.notes.splice(index, 1);
+            
+            // Clear inputs if we're deleting the current note
+            if (this.currentNoteIndex === index) {
+                this.currentNoteIndex = null;
+                this.clearInputs();
             }
+            
+            // Refresh the list
+            this.loadNotes();
+            
+            // Close the context menu if it's open
+            const menu = document.querySelector('.note-actions-menu');
+            if (menu) menu.remove();
+        } catch (error) {
+            console.error('Error deleting note:', error);
         }
     }
 
