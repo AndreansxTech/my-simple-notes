@@ -4,7 +4,7 @@ class MarkdownEditor {
         this.preview = document.createElement('div');
         this.preview.className = 'markdown-preview';
         this.preview.style.display = 'none';
-        this.preview.style.color = 'inherit'; // Add this line
+        this.preview.style.color = 'inherit'; 
         this.editor.parentNode.insertBefore(this.preview, this.editor.nextSibling);
         this.isPreviewMode = false;
     }

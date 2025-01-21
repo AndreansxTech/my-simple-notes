@@ -19,6 +19,9 @@ class NoteTakingApp {
         this.loadNotes();
         this.bindEvents();
         this.applyTheme();
+        if (!localStorage.getItem('welcomed')) {
+            this.showWelcomeWindow();
+        }
     }
 
     bindEvents() {
@@ -198,7 +201,7 @@ class NoteTakingApp {
         });
     }
 
-    async saveNote() {
+    async saveNote(isAutoSave = false) {
         const title = document.getElementById('noteTitle').value.trim();
         const content = this.markdownEditor.getValue();
 
@@ -245,7 +248,11 @@ class NoteTakingApp {
             }
             
             await this.loadNotes();
-            this.showNotification('Note saved successfully!');
+            if (!isAutoSave) {
+                this.showNotification('Note saved successfully!');
+            } else {
+                this.showAutoSaveIndicator();
+            }
         } catch (error) {
             if (error.message === 'duplicate_title') {
                 this.showNotification('A note with this title already exists', 'error');
@@ -306,6 +313,15 @@ class NoteTakingApp {
     createNewNote() {
         this.currentNoteIndex = null;
         this.clearInputs();
+        document.querySelector('.editor').style.display = 'flex';
+        const placeholder = document.querySelector('.no-note-placeholder');
+        if (placeholder) {
+            placeholder.style.display = 'none';
+        }
+        if (this.markdownEditor.isPreviewMode) {
+            this.markdownEditor.togglePreview();
+            this.markdownEditor.togglePreview();
+        }
     }
 
     selectNote(event) {
@@ -315,6 +331,16 @@ class NoteTakingApp {
             const note = this.notes[index];
             document.getElementById('noteTitle').value = note.title;
             document.getElementById('noteContent').value = note.content;
+            document.querySelector('.editor').style.display = 'flex';
+            const placeholder = document.querySelector('.no-note-placeholder');
+            if (placeholder) {
+                placeholder.style.display = 'none';
+            }
+            if (this.markdownEditor.isPreviewMode) {
+                this.markdownEditor.togglePreview();
+                this.markdownEditor.togglePreview();
+            }
+            this.updateWordCount(); // Update word and character count
         }
     }
 
@@ -425,7 +451,7 @@ class NoteTakingApp {
     startAutoSave() {
         this.autoSaveInterval = setInterval(() => {
             if (document.getElementById('noteTitle').value || document.getElementById('noteContent').value) {
-                this.saveNote();
+                this.saveNote(true); // Pass true to indicate auto-save
             }
         }, 30000); // Auto-save every 30 seconds
     }
@@ -493,7 +519,7 @@ class NoteTakingApp {
     }
 
     async showNoteHistory() {
-        if (!this.currentNoteIndex) {
+        if (this.currentNoteIndex === null) {
             this.showNotification('Please select a note first', 'error');
             return;
         }
@@ -571,6 +597,38 @@ class NoteTakingApp {
             await this.saveNote();
             this.showNotification('Version restored successfully!');
         }
+    }
+
+    showWelcomeWindow() {
+        const overlay = document.createElement('div');
+        overlay.className = 'welcome-overlay';
+        const modal = document.createElement('div');
+        modal.className = 'welcome-modal';
+        modal.innerHTML = `
+            <h2>Welcome to My Notes</h2>
+            <p>Use the sidebar to create and manage notes. Try out the preview mode and version history!</p>
+            <button id="closeWelcome">Got It</button>
+        `;
+        overlay.appendChild(modal);
+        document.body.appendChild(overlay);
+
+        const closeWelcome = () => {
+            localStorage.setItem('welcomed', 'true');
+            overlay.remove();
+        };
+        document.getElementById('closeWelcome').addEventListener('click', closeWelcome);
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) closeWelcome();
+        });
+    }
+
+    showAutoSaveIndicator() {
+        const indicator = document.querySelector('.autosave-indicator');
+        if (!indicator) return;
+        indicator.style.display = 'block';
+        setTimeout(() => {
+            indicator.style.display = 'none';
+        }, 1500);
     }
 }
 

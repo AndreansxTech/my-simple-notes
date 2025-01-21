@@ -1,6 +1,6 @@
 export const applyLightTheme = () => {
     document.body.style.backgroundColor = "#ffffff";
-    document.body.style.color = "#000000";
+    document.body.style.color = "#C1BAA1";
 };
 
 export const applyDarkTheme = () => {

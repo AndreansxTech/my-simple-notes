@@ -8,12 +8,12 @@
 }
 
 body.light-mode {
-    --bg-gradient: linear-gradient(135deg, #e0c3fc, #8ec5fc);
+    --bg-gradient: linear-gradient(135deg, #e0f7fa, #f0f0f0, #42a5f5);
     --text-color: #2c3e50;
-    --note-bg: #ffffff;
-    --glass-bg: rgba(255, 255, 255, 0.85);
+    --note-bg: #f9f9f9;
+    --glass-bg: rgba(240, 240, 240, 0.85);
     --glass-border: rgba(0, 0, 0, 0.1);
-    --button-gradient: linear-gradient(135deg, #6a11cb, #2575fc);
+    --button-gradient: linear-gradient(135deg, #42a5f5, #1e88e5);
 }
 
 body {
@@ -35,9 +35,10 @@ body {
 
 .container {
     display: flex;
-    min-height: 100vh;
+    height: 100vh;
     gap: 20px;
     padding: 20px;
+    overflow: hidden;
 }
 
 .sidebar {
@@ -74,7 +75,7 @@ body {
 }
 
 #searchNotes {
-    width: 100%;
+    width: 94%;
     padding: 8px;
     border-radius: 4px;
     border: 1px solid var(--glass-border);
@@ -107,6 +108,18 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow-y: auto;
+    display: none; /* Hide editor by default */
+    position: relative;
+}
+
+.autosave-indicator {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 1.5em;
+    color: lime;
+    display: none;
 }
 
 .editor-footer {
@@ -644,6 +657,12 @@ body.light-mode .menu-item.delete {
     animation: slideIn 0.3s ease-out;
 }
 
+#closeHistory {
+    width: auto;
+    min-width: auto;
+    padding: 5px 10px;
+}
+
 @keyframes slideIn {
     from {
         transform: translateX(100%);
@@ -738,4 +757,38 @@ body.light-mode .menu-item.delete {
 .version-item:hover {
     transform: translateX(-5px);
     background: rgba(255, 255, 255, 0.15);
+}
+
+.welcome-overlay {
+    position: fixed;
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
+    backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.welcome-modal {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 30px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.no-note-placeholder {
+    flex: 1; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-color);
+    font-size: 1.5em;
 }

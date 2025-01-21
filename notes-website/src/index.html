@@ -24,7 +24,7 @@
             <button id="newNote">New Note</button>
             <ul id="noteList"></ul>
         </aside>
-        <main class="editor">
+        <main class="editor" style="display: none;">
             <input type="text" id="noteTitle" placeholder="Note Title">
             <div class="tag-container">
                 <input type="text" id="noteTags" placeholder="Add tags (comma separated)">
@@ -41,6 +41,9 @@
                 </div>
             </div>
         </main>
+        <div class="no-note-placeholder">
+            <h2>Create a new note</h2>
+        </div>
     </div>
     <div id="shortcuts" class="shortcuts-info">
         Ctrl + S: Save | Ctrl + N: New Note | Ctrl + D: Delete
